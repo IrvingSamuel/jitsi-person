@@ -7,8 +7,8 @@
       "platform": "chromeos_play"
     }
   ],
-  "short_name": "Rezumme Meet",
-  "name": "Rezumme Meet",
+  "short_name": "Vitallis Meet",
+  "name": "Vitallis Meet",
   "icons": [
     {
       "src": "static/pwa/icons/icon192.png",
