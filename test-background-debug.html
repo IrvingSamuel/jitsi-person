@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Ícone Selecionar Fundo - Jitsi Meet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        .selector-test {
+            margin: 10px 0;
+            padding: 10px;
+            background: #333;
+            border-radius: 3px;
+        }
+        .found { color: #4CAF50; }
+        .not-found { color: #f44336; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug: Ícone Selecionar Fundo</h1>
+    
+    <div class="debug-section">
+        <h2>🎯 Testes de Seletores</h2>
+        <button onclick="runBackgroundIconTests()">Executar Testes</button>
+        <button onclick="openJitsiInFrame()">Abrir Jitsi em Frame</button>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🖼️ Frame do Jitsi</h2>
+        <iframe id="jitsiFrame" src="" style="width: 100%; height: 600px; border: 1px solid #333;"></iframe>
+    </div>
+
+    <script>
+        function openJitsiInFrame() {
+            const frame = document.getElementById('jitsiFrame');
+            frame.src = window.location.origin;
+            
+            frame.onload = function() {
+                setTimeout(() => {
+                    console.log('Frame carregado, executando testes...');
+                    runBackgroundIconTestsInFrame();
+                }, 3000);
+            };
+        }
+
+        function runBackgroundIconTests() {
+            console.log('🔍 Iniciando testes de seletores para ícone de fundo...');
+            
+            const selectors = [
+                // Seletores básicos
+                '[aria-label="Selecionar Fundo"]',
+                '[aria-label*="Selecionar"]',
+                '[aria-label*="Fundo"]',
+                '[aria-label*="Background"]',
+                '[title*="Selecionar Fundo"]',
+                '[title*="Background"]',
+                
+                // Seletores por classe
+                '.toolbox-icon[aria-label*="Selecionar"]',
+                '.toolbox-icon[aria-label*="Fundo"]',
+                '.toolbox-button[aria-label*="Selecionar"]',
+                '.toolbox-button[aria-label*="Fundo"]',
+                
+                // Seletores específicos do Jitsi
+                '[data-testid*="background"]',
+                '[data-testid*="virtual"]',
+                '.virtual-background-button',
+                '.background-selection-button',
+                
+                // Seletores estruturais
+                '.prejoin-preview-dropdown-container .toolbox-icon',
+                '.welcome .welcome-page-settings .toolbox-icon',
+                '.settings-button-container .toolbox-icon',
+                
+                // Seletores por SVG interno
+                'button svg[d*="background"]',
+                'button svg[d*="image"]',
+                '.toolbox-icon svg + .jitsi-icon',
+                
+                // Seletores mais genéricos
+                'button[aria-label*="Selecionar"]',
+                'div[aria-label*="Selecionar"]'
+            ];
+
+            const results = document.getElementById('testResults');
+            results.innerHTML = '<h3>Resultados dos Testes:</h3>';
+            
+            selectors.forEach((selector, index) => {
+                try {
+                    const elements = document.querySelectorAll(selector);
+                    const found = elements.length > 0;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'selector-test';
+                    div.innerHTML = `
+                        <span class="${found ? 'found' : 'not-found'}">
+                            ${found ? '✓' : '✗'} ${selector}
+                        </span>
+                        <span style="margin-left: 10px; color: #888;">
+                            (${elements.length} elementos)
+                        </span>
+                    `;
+                    
+                    if (found) {
+                        elements.forEach((el, i) => {
+                            const info = document.createElement('div');
+                            info.style.marginLeft = '20px';
+                            info.style.fontSize = '12px';
+                            info.style.color = '#ccc';
+                            info.innerHTML = `
+                                Elemento ${i + 1}: ${el.tagName.toLowerCase()}
+                                ${el.className ? ` class="${el.className}"` : ''}
+                                ${el.getAttribute('aria-label') ? ` aria-label="${el.getAttribute('aria-label')}"` : ''}
+                                ${el.getAttribute('title') ? ` title="${el.getAttribute('title')}"` : ''}
+                            `;
+                            div.appendChild(info);
+                        });
+                    }
+                    
+                    results.appendChild(div);
+                    
+                    console.log(`${found ? '✓' : '✗'} ${selector}: ${elements.length} elementos`, elements);
+                } catch (error) {
+                    console.error(`Erro testando seletor "${selector}":`, error);
+                }
+            });
+        }
+
+        function runBackgroundIconTestsInFrame() {
+            const frame = document.getElementById('jitsiFrame');
+            if (!frame.contentDocument) {
+                console.log('Frame não acessível');
+                return;
+            }
+
+            const frameDoc = frame.contentDocument;
+            
+            // Executar testes no contexto do frame
+            const script = frameDoc.createElement('script');
+            script.textContent = `
+                console.log('🔍 Executando debug no frame do Jitsi...');
+                
+                // Aguardar Jitsi carregar
+                setTimeout(() => {
+                    const allElements = document.querySelectorAll('*');
+                    console.log('Total de elementos no DOM:', allElements.length);
+                    
+                    // Procurar por elementos com texto relacionado a fundo
+                    const textElements = Array.from(allElements).filter(el => {
+                        const text = (el.textContent || '').toLowerCase();
+                        const aria = (el.getAttribute('aria-label') || '').toLowerCase();
+                        const title = (el.getAttribute('title') || '').toLowerCase();
+                        
+                        return text.includes('fundo') || text.includes('background') ||
+                               text.includes('selecionar') || 
+                               aria.includes('fundo') || aria.includes('background') ||
+                               aria.includes('selecionar') ||
+                               title.includes('fundo') || title.includes('background') ||
+                               title.includes('selecionar');
+                    });
+                    
+                    console.log('🎯 Elementos relacionados a fundo/background/selecionar:', textElements.length);
+                    textElements.forEach((el, i) => {
+                        console.log(\`Elemento \${i + 1}:\`, {
+                            tag: el.tagName,
+                            class: el.className,
+                            text: el.textContent?.trim().substring(0, 50),
+                            ariaLabel: el.getAttribute('aria-label'),
+                            title: el.getAttribute('title'),
+                            id: el.id
+                        });
+                    });
+                    
+                    // Verificar se Lord Icons debug está disponível
+                    if (window.jitsiLordIcons) {
+                        console.log('🎭 Executando debug do Lord Icons...');
+                        window.jitsiLordIcons.debug();
+                    }
+                }, 5000);
+            `;
+            
+            frameDoc.head.appendChild(script);
+        }
+
+        // Auto-executar se estiver na página do Jitsi
+        if (window.location.pathname === '/' || window.location.pathname.includes('jitsi')) {
+            setTimeout(runBackgroundIconTests, 2000);
+        }
+    </script>
+</body>
+</html>

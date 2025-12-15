@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Debug Ícone Fundo</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Lord Icons - Selecionar Fundo</h1>
+        
+        <div class="section">
+            <h2>🎯 Testes Disponíveis</h2>
+            <button onclick="testJitsiPage()">Abrir Jitsi e Testar</button>
+            <button onclick="showInstructions()">Mostrar Instruções</button>
+            <button onclick="checkLibrary()">Verificar Biblioteca</button>
+        </div>
+
+        <div class="section">
+            <h2>📋 Instruções</h2>
+            <div id="instructions" class="result">
+1. Clique em "Abrir Jitsi e Testar" para abrir o Jitsi Meet
+2. Na página do Jitsi, abra o Console do Navegador (F12 → Console)
+3. Execute o comando: jitsiLordIcons.debug()
+4. Procure na saída por elementos relacionados a "Selecionar Fundo"
+5. Se necessário, execute: jitsiLordIcons.reinit() para reinicializar
+
+Comandos úteis no console:
+- jitsiLordIcons.debug() - Mostra debug completo
+- jitsiLordIcons.reinit() - Reinicializa os ícones
+- jitsiLordIcons.replace() - Força a substituição dos ícones
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Status da Biblioteca</h2>
+            <div id="libraryStatus" class="result">Clique em "Verificar Biblioteca" para testar</div>
+        </div>
+    </div>
+
+    <script>
+        function testJitsiPage() {
+            // Abrir Jitsi em nova aba
+            const jitsiUrl = window.location.origin;
+            const newWindow = window.open(jitsiUrl, '_blank');
+            
+            if (newWindow) {
+                alert('Jitsi aberto em nova aba. Vá para lá e use o Console para debug.');
+            } else {
+                alert('Popup bloqueado. Acesse manualmente: ' + jitsiUrl);
+            }
+        }
+
+        function showInstructions() {
+            const instructions = document.getElementById('instructions');
+            instructions.scrollIntoView({ behavior: 'smooth' });
+            instructions.style.border = '2px solid #ff9800';
+            setTimeout(() => {
+                instructions.style.border = 'none';
+            }, 2000);
+        }
+
+        function checkLibrary() {
+            const status = document.getElementById('libraryStatus');
+            let result = '';
+            
+            // Verificar se estamos no Jitsi
+            const isJitsi = window.location.pathname === '/' || window.location.href.includes('jitsi');
+            result += `🌐 Página atual: ${isJitsi ? 'Jitsi Meet' : 'Página de teste'}\n`;
+            
+            // Verificar Lord Icons
+            const lordIconLoaded = typeof window.lordicon !== 'undefined';
+            result += `🎭 Lord Icons carregado: ${lordIconLoaded ? '✅ Sim' : '❌ Não'}\n`;
+            
+            // Verificar nossa biblioteca
+            const ourLibLoaded = typeof window.jitsiLordIcons !== 'undefined';
+            result += `📚 Nossa biblioteca carregada: ${ourLibLoaded ? '✅ Sim' : '❌ Não'}\n`;
+            
+            if (ourLibLoaded) {
+                result += `🔧 Funções disponíveis:\n`;
+                result += `   - debug(): ${typeof window.jitsiLordIcons.debug === 'function' ? '✅' : '❌'}\n`;
+                result += `   - reinit(): ${typeof window.jitsiLordIcons.reinit === 'function' ? '✅' : '❌'}\n`;
+                result += `   - replace(): ${typeof window.jitsiLordIcons.replace === 'function' ? '✅' : '❌'}\n`;
+            }
+            
+            // Verificar elementos DOM se estivermos no Jitsi
+            if (isJitsi) {
+                const toolboxIcons = document.querySelectorAll('.toolbox-icon');
+                result += `🔍 Ícones toolbox encontrados: ${toolboxIcons.length}\n`;
+                
+                const lordIcons = document.querySelectorAll('lord-icon');
+                result += `🎭 Lord Icons no DOM: ${lordIcons.length}\n`;
+                
+                const backgroundElements = document.querySelectorAll('[aria-label*="Selecionar"], [aria-label*="Fundo"]');
+                result += `🖼️ Elementos com "Selecionar/Fundo": ${backgroundElements.length}\n`;
+                
+                if (backgroundElements.length > 0) {
+                    result += `\n🎯 Detalhes dos elementos de fundo:\n`;
+                    backgroundElements.forEach((el, i) => {
+                        result += `   ${i+1}. ${el.tagName} - "${el.getAttribute('aria-label') || el.getAttribute('title') || 'sem label'}"\n`;
+                    });
+                }
+            }
+            
+            status.textContent = result;
+            status.className = 'result ' + (lordIconLoaded && ourLibLoaded ? 'success' : 'warning');
+        }
+
+        // Auto-check ao carregar
+        setTimeout(checkLibrary, 1000);
+    </script>
+</body>
+</html>

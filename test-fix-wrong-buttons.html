@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção - Ícones em Botões Incorretos</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+        .info { color: #2196F3; }
+        .code {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .fixed { background: #1b5e20; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Correção - Ícones em Botões Incorretos</h1>
+        
+        <div class="section">
+            <h2>❌ Problema Identificado</h2>
+            <div class="result error">
+<strong>PROBLEMA:</strong>
+O ícone de configurações estava sendo inserido no botão "Convidar pessoas" 
+em vez do botão "Alternar configurações".
+
+<strong>CAUSA:</strong>
+- Seletores muito genéricos capturavam botões incorretos
+- Variável `settingsSelectors` não definida na função observer
+- Falta de verificação se o ícone estava no botão correto
+
+<strong>HTML PROBLEMÁTICO:</strong>
+<!-- CORRETO -->
+&lt;div aria-label="Alternar configurações"&gt;
+  &lt;div class="toolbox-icon"&gt;
+    &lt;lord-icon&gt;...&lt;/lord-icon&gt; ✅
+  &lt;/div&gt;
+&lt;/div&gt;
+
+<!-- INCORRETO (antes da correção) -->
+&lt;div aria-label="Convidar pessoas"&gt;
+  &lt;div class="toolbox-icon"&gt;...&lt;/div&gt;
+  &lt;lord-icon&gt;...&lt;/lord-icon&gt; ❌ (posição errada)
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✅ Correções Aplicadas</h2>
+            <div class="result success">
+<strong>1. SELETORES ESPECÍFICOS:</strong>
+- Mudança para '[aria-label="Alternar configurações"]'
+- Remoção de seletores genéricos que capturavam outros botões
+- Verificação específica do aria-label
+
+<strong>2. FUNÇÃO OBSERVER CORRIGIDA:</strong>
+- Definição da variável `settingsSelectors` dentro da função
+- Lógica hierárquica: botão → .toolbox-icon → lord-icon
+
+<strong>3. FUNÇÃO DE LIMPEZA:</strong>
+- `jitsiLordIcons.clean()` - Remove ícones de botões incorretos
+- `jitsiLordIcons.fix()` - Move ícones mal posicionados
+- Verificação de aria-label antes de aplicar ícones
+
+<strong>4. VALIDAÇÃO DE BOTÕES:</strong>
+- Lista de botões permitidos: "Selecionar Fundo", "Alternar configurações", etc.
+- Lista de botões proibidos: "Convidar pessoas", "Invite", etc.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Testes</h2>
+            <button onclick="testJitsiPage()">Abrir Jitsi</button>
+            <button onclick="showCommands()">Comandos Correção</button>
+            <button onclick="testCurrentPage()">Verificar Página</button>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Comandos para Console</h2>
+            <div id="commands" class="result code">
+// 1. Limpar ícones em botões incorretos
+jitsiLordIcons.clean()
+
+// 2. Corrigir posicionamento de ícones
+jitsiLordIcons.fix()
+
+// 3. Debug completo
+jitsiLordIcons.debug()
+
+// 4. Verificar botões específicos
+document.querySelectorAll('[aria-label*="Convidar"]').forEach(btn => {
+  const icons = btn.querySelectorAll('lord-icon');
+  console.log('Botão Convidar:', btn.getAttribute('aria-label'), 'Icons:', icons.length);
+});
+
+document.querySelectorAll('[aria-label*="Alternar configurações"]').forEach(btn => {
+  const icons = btn.querySelectorAll('lord-icon');
+  console.log('Botão Configurações:', btn.getAttribute('aria-label'), 'Icons:', icons.length);
+});
+
+// 5. Reinicializar se necessário
+jitsiLordIcons.reinit()
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Status dos Botões</h2>
+            <div id="status" class="result">Clique em "Verificar Página" para testar</div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Resultado Esperado</h2>
+            <div class="result info">
+<strong>APÓS A CORREÇÃO:</strong>
+
+✅ Botão "Alternar configurações":
+   - Deve ter 1 lord-icon de configurações (engrenagem)
+   - Ícone dentro do .toolbox-icon
+   - Src: lecprnjb.json
+
+❌ Botão "Convidar pessoas":
+   - NÃO deve ter lord-icon
+   - Apenas o SVG original de "adicionar pessoa"
+
+✅ Botão "Selecionar Fundo":
+   - Deve ter 1 lord-icon de galeria
+   - Ícone dentro do .toolbox-icon
+   - Src: wloilxuq.json
+
+✅ Botões de Áudio/Vídeo:
+   - Devem ter lord-icons corretos
+   - Cores baseadas no estado (branco/vermelho)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testJitsiPage() {
+            const jitsiUrl = window.location.origin;
+            const newWindow = window.open(jitsiUrl, '_blank');
+            
+            if (newWindow) {
+                alert(`Jitsi aberto!\n\nPara testar:\n1. Entre na sala\n2. Abra Console (F12)\n3. Execute: jitsiLordIcons.clean()\n4. Execute: jitsiLordIcons.fix()\n5. Verifique os botões`);
+            } else {
+                alert('Popup bloqueado. Acesse: ' + jitsiUrl);
+            }
+        }
+
+        function showCommands() {
+            const commands = document.getElementById('commands');
+            commands.scrollIntoView({ behavior: 'smooth' });
+            commands.style.border = '2px solid #007bff';
+            setTimeout(() => {
+                commands.style.border = '1px solid #444';
+            }, 2000);
+        }
+
+        function testCurrentPage() {
+            const status = document.getElementById('status');
+            let result = '';
+            
+            const isJitsi = window.location.pathname === '/' || window.location.href.includes('jitsi');
+            result += `🌐 Página: ${isJitsi ? 'Jitsi Meet' : 'Página de teste'}\n`;
+            
+            if (isJitsi) {
+                const ourLibLoaded = typeof window.jitsiLordIcons !== 'undefined';
+                result += `📚 Biblioteca: ${ourLibLoaded ? '✅ Carregada' : '❌ Não carregada'}\n\n`;
+                
+                if (ourLibLoaded) {
+                    // Testar função de limpeza
+                    const cleanAvailable = typeof window.jitsiLordIcons.clean === 'function';
+                    result += `🧹 Função clean(): ${cleanAvailable ? '✅ Disponível' : '❌ Não disponível'}\n\n`;
+                    
+                    // Verificar botão "Convidar pessoas"
+                    const inviteButton = document.querySelector('[aria-label*="Convidar"]');
+                    if (inviteButton) {
+                        const inviteIcons = inviteButton.querySelectorAll('lord-icon');
+                        result += `👥 BOTÃO CONVIDAR:\n`;
+                        result += `   Encontrado: ✅\n`;
+                        result += `   Lord Icons: ${inviteIcons.length} ${inviteIcons.length === 0 ? '✅' : '❌'}\n`;
+                        result += `   Status: ${inviteIcons.length === 0 ? 'CORRETO (sem ícones)' : 'INCORRETO (tem ícones)'}\n\n`;
+                    } else {
+                        result += `👥 BOTÃO CONVIDAR: Não encontrado\n\n`;
+                    }
+                    
+                    // Verificar botão "Alternar configurações"
+                    const settingsButton = document.querySelector('[aria-label*="Alternar configurações"]');
+                    if (settingsButton) {
+                        const settingsToolboxIcon = settingsButton.querySelector('.toolbox-icon');
+                        const settingsIcons = settingsToolboxIcon?.querySelectorAll('lord-icon') || [];
+                        result += `⚙️ BOTÃO CONFIGURAÇÕES:\n`;
+                        result += `   Encontrado: ✅\n`;
+                        result += `   Toolbox Icon: ${settingsToolboxIcon ? '✅' : '❌'}\n`;
+                        result += `   Lord Icons dentro: ${settingsIcons.length} ${settingsIcons.length === 1 ? '✅' : '❌'}\n`;
+                        if (settingsIcons.length > 0) {
+                            result += `   Src: ${settingsIcons[0].getAttribute('src')?.split('/').pop()}\n`;
+                        }
+                        result += `   Status: ${settingsIcons.length === 1 ? 'CORRETO' : 'INCORRETO'}\n\n`;
+                    } else {
+                        result += `⚙️ BOTÃO CONFIGURAÇÕES: Não encontrado\n\n`;
+                    }
+                    
+                    // Verificar botão "Selecionar Fundo"
+                    const backgroundButton = document.querySelector('[aria-label*="Selecionar Fundo"]');
+                    if (backgroundButton) {
+                        const backgroundToolboxIcon = backgroundButton.querySelector('.toolbox-icon');
+                        const backgroundIcons = backgroundToolboxIcon?.querySelectorAll('lord-icon') || [];
+                        result += `🖼️ BOTÃO FUNDO:\n`;
+                        result += `   Encontrado: ✅\n`;
+                        result += `   Toolbox Icon: ${backgroundToolboxIcon ? '✅' : '❌'}\n`;
+                        result += `   Lord Icons dentro: ${backgroundIcons.length} ${backgroundIcons.length === 1 ? '✅' : '❌'}\n`;
+                        if (backgroundIcons.length > 0) {
+                            result += `   Src: ${backgroundIcons[0].getAttribute('src')?.split('/').pop()}\n`;
+                        }
+                        result += `   Status: ${backgroundIcons.length === 1 ? 'CORRETO' : 'INCORRETO'}\n\n`;
+                    } else {
+                        result += `🖼️ BOTÃO FUNDO: Não encontrado\n\n`;
+                    }
+                    
+                    // Contagem geral
+                    const allLordIcons = document.querySelectorAll('lord-icon.jitsi-lord-icon');
+                    const misplacedIcons = document.querySelectorAll('.toolbox-button > lord-icon.jitsi-lord-icon');
+                    result += `📊 RESUMO:\n`;
+                    result += `   Total Lord Icons: ${allLordIcons.length}\n`;
+                    result += `   Ícones mal posicionados: ${misplacedIcons.length}\n`;
+                    
+                    if (misplacedIcons.length > 0 || inviteButton?.querySelectorAll('lord-icon').length > 0) {
+                        result += `\n🔧 EXECUTE: jitsiLordIcons.clean() && jitsiLordIcons.fix()\n`;
+                    }
+                } else {
+                    result += `❌ Biblioteca não carregada. Recarregue a página.\n`;
+                }
+            } else {
+                result += `\n⚠️ Para testar, acesse o Jitsi Meet.\n`;
+            }
+            
+            status.textContent = result;
+            status.className = 'result ' + (isJitsi ? 'success' : 'info');
+        }
+
+        // Auto-test se estivermos no Jitsi
+        setTimeout(() => {
+            if (window.location.pathname === '/' || window.location.href.includes('jitsi')) {
+                testCurrentPage();
+                // Re-testar após um tempo
+                setTimeout(testCurrentPage, 5000);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

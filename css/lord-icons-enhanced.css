@@ -1,0 +1,158 @@
+/* Customização dos ícones do Jitsi Meet com Lord Icons - Versão Avançada */
+
+/* Ocultar SVGs originais dos ícones de entrada */
+.audio-preview .toolbox-icon svg,
+.video-preview .toolbox-icon svg,
+.welcome .welcome-page-settings .toolbox-icon svg,
+.settings-button-container .toolbox-icon svg,
+[data-testid="prejoin.audioMute"] svg,
+[data-testid="prejoin.videoMute"] svg,
+[data-testid="prejoin.settings"] svg,
+.prejoin-preview-dropdown-container .toolbox-icon svg,
+.premeeting-screen .toolbox-icon svg {
+    display: none !important;
+}
+
+/* Container base para Lord Icons */
+.toolbox-icon {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Fallback CSS - apenas quando Lord Icons não carregam */
+
+/* Estilos para Lord Icons dinamicamente criados */
+.jitsi-lord-icon {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 15 !important;
+    /* border: 1px solid lime !important; Debug - remover em produção */
+}
+
+/* Ocultar pseudo-elementos quando Lord Icons estão presentes */
+.toolbox-icon:has(.jitsi-lord-icon)::after {
+    display: none !important;
+}
+
+/* Lord Icon para microfone */
+.audio-preview .toolbox-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M12 1a3 3 0 0 1 3 3v8a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3z'/%3E%3Cpath fill='%23ffffff' d='M19 10v2a7 7 0 1 1-14 0v-2a1 1 0 1 1 2 0v2a5 5 0 1 0 10 0v-2a1 1 0 1 1 2 0z'/%3E%3Cpath fill='%23ffffff' d='M10 20h4v2h-4z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+}
+
+/* Lord Icon para microfone mutado */  
+.audio-preview .toolbox-icon.toggled::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23e04757' d='M12 1a3 3 0 0 1 3 3v8a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3z'/%3E%3Cpath fill='%23e04757' d='M19 10v2a7 7 0 1 1-14 0v-2a1 1 0 1 1 2 0v2a5 5 0 1 0 10 0v-2a1 1 0 1 1 2 0z'/%3E%3Cpath fill='%23e04757' d='M10 20h4v2h-4z'/%3E%3Cline x1='1' y1='1' x2='23' y2='23' stroke='%23e04757' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+/* Lord Icon para câmera */
+.video-preview .toolbox-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M23 7l-7 5.5L23 18V7z'/%3E%3Crect x='1' y='5' width='15' height='14' rx='2' ry='2' fill='%23ffffff'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+}
+
+/* Lord Icon para câmera desabilitada */
+.video-preview .toolbox-icon.toggled::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23e04757' d='M23 7l-7 5.5L23 18V7z'/%3E%3Crect x='1' y='5' width='15' height='14' rx='2' ry='2' fill='%23e04757'/%3E%3Cline x1='1' y1='1' x2='23' y2='23' stroke='%23e04757' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+/* Lord Icon para configurações */
+.welcome .welcome-page-settings .toolbox-icon::after,
+.settings-button-container .toolbox-icon::after,
+[data-testid="prejoin.settings"]::after,
+.prejoin-preview-dropdown-container .toolbox-icon::after,
+.toolbox-icon[aria-label*="settings"]::after,
+.toolbox-icon[title*="settings"]::after,
+.toolbox-icon[aria-label*="configurações"]::after,
+.toolbox-icon[title*="configurações"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3' fill='%23ffffff'/%3E%3Cpath fill='%23ffffff' d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+}
+
+/* Animações de hover para efeito Lord Icons */
+.toolbox-icon:hover::after {
+    transform: translate(-50%, -50%) scale(1.1);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Animação de clique */  
+.toolbox-icon:active::after {
+    transform: translate(-50%, -50%) scale(0.9);
+    transition: all 0.1s ease;
+}
+
+/* Responsividade */
+@media (max-width: 500px) {
+    .audio-preview .toolbox-icon::after,
+    .video-preview .toolbox-icon::after,
+    .welcome .welcome-page-settings .toolbox-icon::after,
+    .settings-button-container .toolbox-icon::after {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .toolbox-icon:hover::after {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+}
+
+/* Estados de loading/carregamento */
+@keyframes lordIconPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.toolbox-icon.loading::after {
+    animation: lordIconPulse 1s ease-in-out infinite;
+}
+
+/* Melhorias de acessibilidade */
+.toolbox-icon:focus::after {
+    outline: 2px solid #44a5ff;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Dark mode - já aplicado por padrão mas pode ser ajustado */
+@media (prefers-color-scheme: dark) {
+    .audio-preview .toolbox-icon::after,
+    .video-preview .toolbox-icon::after,
+    .welcome .welcome-page-settings .toolbox-icon::after,
+    .settings-button-container .toolbox-icon::after {
+        filter: brightness(1.1);
+    }
+}

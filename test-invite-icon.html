@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Ícone Convidar Pessoas</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+        .info { color: #2196F3; }
+        .code {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .new { background: #1b5e20; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Novo Ícone: Convidar Pessoas</h1>
+        
+        <div class="section">
+            <h2>✨ Nova Funcionalidade Adicionada</h2>
+            <div class="result new">
+<strong>ÍCONE ADICIONADO:</strong>
+👥 Botão "Convidar pessoas" agora tem Lord Icon!
+
+<strong>DETALHES:</strong>
+- Ícone: jdgfsfzr.json (pessoa com símbolo de "+")
+- Seletor: [aria-label="Convidar pessoas"]
+- Cores: primary:#ffffff,secondary:#ffffff (branco)
+- Trigger: hover
+- Tamanho: 24x24px
+
+<strong>LOCALIZAÇÃO:</strong>
+.toolbox-button[aria-label="Convidar pessoas"]
+  └── .toolbox-icon
+      ├── svg (original - hidden)
+      └── lord-icon (NOVO - jdgfsfzr.json) ✨
+
+<strong>INTEGRAÇÃO:</strong>
+✅ Função replaceInviteIcon() criada
+✅ Seletores específicos adicionados
+✅ MutationObserver configurado
+✅ Função fix() atualizada para permitir ícone
+✅ Função clean() atualizada (removido da lista de proibidos)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Testes</h2>
+            <button onclick="testJitsiPage()">Abrir Jitsi</button>
+            <button onclick="showCommands()">Comandos Específicos</button>
+            <button onclick="testCurrentPage()">Verificar Implementação</button>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Comandos Específicos para Convite</h2>
+            <div id="commands" class="result code">
+// 1. Debug específico do botão de convite
+const inviteBtn = document.querySelector('[aria-label="Convidar pessoas"]');
+console.log('Botão Convite:', {
+  encontrado: !!inviteBtn,
+  ariaLabel: inviteBtn?.getAttribute('aria-label'),
+  temLordIcon: !!inviteBtn?.querySelector('lord-icon'),
+  lordIconSrc: inviteBtn?.querySelector('lord-icon')?.getAttribute('src')
+});
+
+// 2. Verificar se o ícone está na posição correta
+const inviteToolboxIcon = inviteBtn?.querySelector('.toolbox-icon');
+console.log('Toolbox Icon do Convite:', {
+  existe: !!inviteToolboxIcon,
+  temLordIcon: !!inviteToolboxIcon?.querySelector('lord-icon'),
+  temSvg: !!inviteToolboxIcon?.querySelector('svg')
+});
+
+// 3. Forçar substituição se necessário
+if (inviteBtn && inviteToolboxIcon && !inviteToolboxIcon.querySelector('lord-icon')) {
+  console.log('🔄 Forçando substituição do ícone de convite...');
+  jitsiLordIcons.replace();
+}
+
+// 4. Debug completo
+jitsiLordIcons.debug();
+
+// 5. Verificar todos os ícones implementados
+['Convidar pessoas', 'Selecionar Fundo', 'Alternar configurações', 'Ativar som', 'Ativar câmera'].forEach(label => {
+  const btn = document.querySelector(`[aria-label*="${label}"]`);
+  const icon = btn?.querySelector('.toolbox-icon lord-icon');
+  console.log(`${label}: ${btn ? '✅' : '❌'} | Lord Icon: ${icon ? '✅' : '❌'} | Src: ${icon?.getAttribute('src')?.split('/').pop() || 'N/A'}`);
+});
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Status da Implementação</h2>
+            <div id="status" class="result">Clique em "Verificar Implementação" para testar</div>
+        </div>
+
+        <div class="section">
+            <h2>🎭 Todos os Ícones Implementados</h2>
+            <div class="result info">
+<strong>LISTA COMPLETA DE ÍCONES JITSI:</strong>
+
+🎤 <strong>Microfone:</strong>
+   - Ícone: vycwlttg.json
+   - Estados: Branco (ligado) / Vermelho (mutado)
+   - Seletor: .audio-preview .toolbox-icon
+
+📹 <strong>Câmera:</strong>
+   - Ícone: gksubfms.json (ligada) / kqbuxhwp.json (desligada)
+   - Estados: Branco (ligada) / Vermelho (desligada)
+   - Seletor: .video-preview .toolbox-icon
+
+👥 <strong>Convidar Pessoas:</strong> ✨ NOVO
+   - Ícone: jdgfsfzr.json
+   - Cor: Branco fixo
+   - Seletor: [aria-label="Convidar pessoas"]
+
+🖼️ <strong>Selecionar Fundo:</strong>
+   - Ícone: wloilxuq.json
+   - Cores: Branco + Azul secundário
+   - Seletor: [aria-label="Selecionar Fundo"]
+
+⚙️ <strong>Configurações:</strong>
+   - Ícone: lecprnjb.json
+   - Cor: Branco fixo
+   - Seletor: [aria-label="Alternar configurações"]
+
+<strong>TOTAL: 5 ícones implementados! 🎉</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testJitsiPage() {
+            const jitsiUrl = window.location.origin;
+            const newWindow = window.open(jitsiUrl, '_blank');
+            
+            if (newWindow) {
+                alert(`Jitsi aberto!\n\n🔍 Para testar o novo ícone:\n1. Entre na sala\n2. Procure o botão "Convidar pessoas"\n3. Deve ter o ícone jdgfsfzr (pessoa com +)\n4. Abra Console (F12) para debug\n5. Execute os comandos específicos`);
+            } else {
+                alert('Popup bloqueado. Acesse: ' + jitsiUrl);
+            }
+        }
+
+        function showCommands() {
+            const commands = document.getElementById('commands');
+            commands.scrollIntoView({ behavior: 'smooth' });
+            commands.style.border = '2px solid #4CAF50';
+            setTimeout(() => {
+                commands.style.border = '1px solid #444';
+            }, 2000);
+        }
+
+        function testCurrentPage() {
+            const status = document.getElementById('status');
+            let result = '';
+            
+            const isJitsi = window.location.pathname === '/' || window.location.href.includes('jitsi');
+            result += `🌐 Página: ${isJitsi ? 'Jitsi Meet' : 'Página de teste'}\n`;
+            
+            if (isJitsi) {
+                const ourLibLoaded = typeof window.jitsiLordIcons !== 'undefined';
+                result += `📚 Biblioteca: ${ourLibLoaded ? '✅ Carregada' : '❌ Não carregada'}\n\n`;
+                
+                if (ourLibLoaded) {
+                    // Verificar se a função replaceInviteIcon existe (não está exposta globalmente)
+                    const scriptContent = document.querySelector('script[src*="jitsi-lord-icons"]')?.textContent || '';
+                    const hasInviteFunction = scriptContent.includes('replaceInviteIcon') || 
+                                            document.documentElement.innerHTML.includes('replaceInviteIcon');
+                    result += `🔧 Função replaceInviteIcon: ${hasInviteFunction ? '✅ Implementada' : '❌ Não encontrada'}\n\n`;
+                    
+                    // Verificar botão "Convidar pessoas"
+                    const inviteButton = document.querySelector('[aria-label*="Convidar"]');
+                    if (inviteButton) {
+                        const inviteToolboxIcon = inviteButton.querySelector('.toolbox-icon');
+                        const inviteIcons = inviteToolboxIcon?.querySelectorAll('lord-icon') || [];
+                        const lordIconSrc = inviteIcons[0]?.getAttribute('src');
+                        
+                        result += `👥 BOTÃO CONVIDAR PESSOAS:\n`;
+                        result += `   Encontrado: ✅\n`;
+                        result += `   Aria-label: "${inviteButton.getAttribute('aria-label')}"\n`;
+                        result += `   Toolbox Icon: ${inviteToolboxIcon ? '✅' : '❌'}\n`;
+                        result += `   Lord Icons: ${inviteIcons.length} ${inviteIcons.length === 1 ? '✅' : (inviteIcons.length === 0 ? '⏳' : '❌')}\n`;
+                        
+                        if (inviteIcons.length > 0) {
+                            const expectedSrc = 'jdgfsfzr.json';
+                            const actualSrc = lordIconSrc?.split('/').pop();
+                            result += `   Src: ${actualSrc}\n`;
+                            result += `   Ícone correto: ${actualSrc === expectedSrc ? '✅' : '❌'}\n`;
+                            result += `   Cores: ${inviteIcons[0].getAttribute('colors')}\n`;
+                        } else {
+                            result += `   Status: ⏳ Aguardando substituição\n`;
+                            result += `   💡 Execute: jitsiLordIcons.replace()\n`;
+                        }
+                        result += `\n`;
+                    } else {
+                        result += `👥 BOTÃO CONVIDAR: ❌ Não encontrado\n\n`;
+                    }
+                    
+                    // Resumo de todos os ícones
+                    const iconButtons = [
+                        { label: 'Ativar som', expected: 'vycwlttg.json' },
+                        { label: 'Ativar câmera', expected: 'gksubfms.json' },
+                        { label: 'Convidar pessoas', expected: 'jdgfsfzr.json' },
+                        { label: 'Selecionar Fundo', expected: 'wloilxuq.json' },
+                        { label: 'Alternar configurações', expected: 'lecprnjb.json' }
+                    ];
+                    
+                    result += `📊 RESUMO TODOS OS ÍCONES:\n`;
+                    let totalImplemented = 0;
+                    
+                    iconButtons.forEach(({ label, expected }) => {
+                        const btn = document.querySelector(`[aria-label*="${label}"]`);
+                        const icon = btn?.querySelector('.toolbox-icon lord-icon');
+                        const actualSrc = icon?.getAttribute('src')?.split('/').pop();
+                        const isCorrect = actualSrc === expected;
+                        
+                        if (isCorrect) totalImplemented++;
+                        
+                        result += `   ${label}: ${btn ? '✅' : '❌'} | Icon: ${icon ? '✅' : '❌'} | ${isCorrect ? '✅' : '❌'}\n`;
+                    });
+                    
+                    result += `\n🎯 TOTAL IMPLEMENTADOS: ${totalImplemented}/5 ícones\n`;
+                    
+                    if (totalImplemented < 5) {
+                        result += `\n🔄 Para completar: jitsiLordIcons.replace()\n`;
+                    } else {
+                        result += `\n🎉 TODOS OS ÍCONES IMPLEMENTADOS COM SUCESSO!\n`;
+                    }
+                    
+                } else {
+                    result += `❌ Biblioteca não carregada. Recarregue a página.\n`;
+                }
+            } else {
+                result += `\n⚠️ Para testar, acesse o Jitsi Meet.\n`;
+            }
+            
+            status.textContent = result;
+            status.className = 'result ' + (isJitsi ? 'success' : 'info');
+        }
+
+        // Auto-test se estivermos no Jitsi
+        setTimeout(() => {
+            if (window.location.pathname === '/' || window.location.href.includes('jitsi')) {
+                testCurrentPage();
+                // Re-testar após um tempo para capturar mudanças
+                setTimeout(testCurrentPage, 5000);
+                setTimeout(testCurrentPage, 10000);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

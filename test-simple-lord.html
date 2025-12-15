@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - Lord Icons</title>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <style>
+        body {
+            background: #040404;
+            color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        .test {
+            margin: 20px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Simples Lord Icons</h1>
+    
+    <div class="test">
+        <h2>Teste 1: Lord Icon Direto</h2>
+        <lord-icon
+            src="https://cdn.lordicon.com/vycwlttg.json"
+            trigger="hover"
+            colors="primary:#ffffff"
+            style="width:64px;height:64px">
+        </lord-icon>
+        <p>Se você vir um ícone animado acima, Lord Icons está funcionando!</p>
+    </div>
+    
+    <div class="test">
+        <h2>Teste 2: Lord Icon Dinâmico</h2>
+        <div id="dynamic-container"></div>
+        <button onclick="createDynamicIcon()" style="background:#44a5ff;color:white;border:none;padding:10px 15px;border-radius:5px;cursor:pointer;">Criar Ícone Dinâmico</button>
+    </div>
+    
+    <div class="test">
+        <h2>Teste 3: Múltiplos Ícones</h2>
+        <lord-icon src="https://cdn.lordicon.com/vycwlttg.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px;margin:10px;"></lord-icon>
+        <lord-icon src="https://cdn.lordicon.com/mqcyelfn.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px;margin:10px;"></lord-icon>
+        <lord-icon src="https://cdn.lordicon.com/lecprnjb.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px;margin:10px;"></lord-icon>
+    </div>
+
+    <script>
+        function createDynamicIcon() {
+            const container = document.getElementById('dynamic-container');
+            container.innerHTML = '';
+            
+            const lordIcon = document.createElement('lord-icon');
+            lordIcon.setAttribute('src', 'https://cdn.lordicon.com/nzixoeyk.json');
+            lordIcon.setAttribute('trigger', 'hover');
+            lordIcon.setAttribute('colors', 'primary:#e04757');
+            lordIcon.style.width = '64px';
+            lordIcon.style.height = '64px';
+            
+            container.appendChild(lordIcon);
+            console.log('✅ Ícone dinâmico criado');
+        }
+        
+        console.log('🧪 Teste simples carregado');
+        console.log('📍 Lord Icon library:', typeof window.lordicon);
+        
+        setTimeout(() => {
+            const lordIcons = document.querySelectorAll('lord-icon');
+            console.log('📊 Total Lord Icons:', lordIcons.length);
+            lordIcons.forEach((icon, index) => {
+                console.log(`📍 Icon ${index + 1}:`, icon.getAttribute('src'));
+            });
+        }, 2000);
+    </script>
+</body>
+</html>

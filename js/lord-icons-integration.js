@@ -1,0 +1,262 @@
+/**
+ * Script para implementar Lord Icons nos ícones do Jitsi Meet
+ * Este script substitui dinamicamente os ícones SVG por Lord Icons
+ */
+
+(function() {
+    'use strict';
+    
+    // Aguardar o carregamento completo da página
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLordIcons);
+    } else {
+        initLordIcons();
+    }
+    
+    // Também tentar quando a página carrega completamente
+    window.addEventListener('load', () => {
+        setTimeout(initLordIcons, 2000);
+    });
+    
+    function initLordIcons() {
+        console.log('🎭 Iniciando Lord Icons...');
+        
+        // Aguardar o Jitsi Meet carregar completamente
+        let attempts = 0;
+        const maxAttempts = 20;
+        
+        function tryReplace() {
+            attempts++;
+            console.log(`🔄 Tentativa ${attempts} de ${maxAttempts}`);
+            
+            // Verificar se os elementos existem
+            const audioPreview = document.querySelector('.audio-preview .toolbox-icon');
+            const videoPreview = document.querySelector('.video-preview .toolbox-icon');
+            
+            if (audioPreview || videoPreview || attempts >= maxAttempts) {
+                console.log('✅ Elementos encontrados ou limite atingido, iniciando substituição...');
+                replacePreJoinIcons();
+                observeIconChanges();
+            } else {
+                console.log('⏳ Aguardando elementos aparecerem...');
+                setTimeout(tryReplace, 500);
+            }
+        }
+        
+        tryReplace();
+    }
+    
+    function replacePreJoinIcons() {
+        console.log('🎬 Jitsi Lord Icons: Iniciando substituição dos ícones...');
+        
+        // Tentar vários seletores para encontrar os ícones
+        const selectors = [
+            '.audio-preview .toolbox-icon',
+            '.video-preview .toolbox-icon', 
+            '[data-testid="prejoin.audioMute"]',
+            '[data-testid="prejoin.videoMute"]',
+            '.prejoin-preview-dropdown-container .toolbox-icon',
+            '.premeeting-screen .toolbox-icon'
+        ];
+        
+        selectors.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            console.log(`🔍 Seletor "${selector}": ${elements.length} elementos encontrados`);
+            
+            elements.forEach((element, index) => {
+                console.log(`📍 Elemento ${index + 1}:`, element);
+                
+                // Determinar tipo de ícone baseado no contexto
+                if (selector.includes('audio') || element.closest('.audio-preview')) {
+                    if (!element.querySelector('.jitsi-lord-icon')) {
+                        replaceMicrophoneIcon(element);
+                        console.log('🎤 Ícone de microfone substituído');
+                    }
+                } else if (selector.includes('video') || element.closest('.video-preview')) {
+                    if (!element.querySelector('.jitsi-lord-icon')) {
+                        replaceCameraIcon(element);
+                        console.log('📹 Ícone de câmera substituído');
+                    }
+                }
+            });
+        });
+        
+        // Ícone de configurações
+        const settingsSelectors = [
+            '.welcome .welcome-page-settings .toolbox-icon',
+            '.settings-button-container .toolbox-icon',
+            '[data-testid="prejoin.settings"]'
+        ];
+        
+        settingsSelectors.forEach(selector => {
+            const settingsIcon = document.querySelector(selector);
+            if (settingsIcon && !settingsIcon.querySelector('.jitsi-lord-icon')) {
+                replaceSettingsIcon(settingsIcon);
+                console.log('⚙️ Ícone de configurações substituído');
+            }
+        });
+    }
+    
+    function replaceMicrophoneIcon(element) {
+        // Remover SVG existente
+        const existingSvg = element.querySelector('svg');
+        if (existingSvg) {
+            existingSvg.style.display = 'none';
+        }
+        
+        // Criar Lord Icon
+        const lordIcon = document.createElement('lord-icon');
+        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/vycwlttg.json');
+        lordIcon.setAttribute('trigger', 'hover');
+        lordIcon.setAttribute('colors', 'primary:#ffffff,secondary:#ffffff');
+        lordIcon.style.width = '24px';
+        lordIcon.style.height = '24px';
+        lordIcon.classList.add('jitsi-lord-icon');
+        
+        // Inserir o Lord Icon
+        element.appendChild(lordIcon);
+        
+        // Observar mudanças de estado (muted/unmuted)
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isToggled = element.classList.contains('toggled');
+                    if (isToggled) {
+                        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/nzixoeyk.json');
+                        lordIcon.setAttribute('colors', 'primary:#e04757,secondary:#e04757');
+                    } else {
+                        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/vycwlttg.json');
+                        lordIcon.setAttribute('colors', 'primary:#ffffff,secondary:#ffffff');
+                    }
+                }
+            });
+        });
+        
+        observer.observe(element, { attributes: true });
+    }
+    
+    function replaceCameraIcon(element) {
+        // Remover SVG existente
+        const existingSvg = element.querySelector('svg');
+        if (existingSvg) {
+            existingSvg.style.display = 'none';
+        }
+        
+        // Criar Lord Icon
+        const lordIcon = document.createElement('lord-icon');
+        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/mqcyelfn.json');
+        lordIcon.setAttribute('trigger', 'hover');
+        lordIcon.setAttribute('colors', 'primary:#ffffff');
+        lordIcon.style.width = '24px';
+        lordIcon.style.height = '24px';
+        lordIcon.classList.add('jitsi-lord-icon');
+        
+        // Inserir o Lord Icon
+        element.appendChild(lordIcon);
+        
+        // Observar mudanças de estado (on/off)
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isToggled = element.classList.contains('toggled');
+                    if (isToggled) {
+                        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/kqbuxhwp.json');
+                        lordIcon.setAttribute('colors', 'primary:#e04757');
+                    } else {
+                        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/mqcyelfn.json');
+                        lordIcon.setAttribute('colors', 'primary:#ffffff');
+                    }
+                }
+            });
+        });
+        
+        observer.observe(element, { attributes: true });
+    }
+    
+    function replaceSettingsIcon(element) {
+        // Remover SVG existente
+        const existingSvg = element.querySelector('svg');
+        if (existingSvg) {
+            existingSvg.style.display = 'none';
+        }
+        
+        // Criar Lord Icon
+        const lordIcon = document.createElement('lord-icon');
+        lordIcon.setAttribute('src', 'https://cdn.lordicon.com/lecprnjb.json');
+        lordIcon.setAttribute('trigger', 'hover');
+        lordIcon.setAttribute('colors', 'primary:#ffffff');
+        lordIcon.style.width = '24px';
+        lordIcon.style.height = '24px';
+        lordIcon.classList.add('jitsi-lord-icon');
+        
+        // Inserir o Lord Icon
+        element.appendChild(lordIcon);
+    }
+    
+    function observeIconChanges() {
+        // Observar mudanças no DOM para capturar novos ícones que possam aparecer
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Verificar se novos ícones foram adicionados
+                        const newAudioIcon = node.querySelector('.audio-preview .toolbox-icon');
+                        const newVideoIcon = node.querySelector('.video-preview .toolbox-icon');
+                        const newSettingsIcon = node.querySelector('.welcome .welcome-page-settings .toolbox-icon');
+                        
+                        if (newAudioIcon && !newAudioIcon.querySelector('.jitsi-lord-icon')) {
+                            replaceMicrophoneIcon(newAudioIcon);
+                        }
+                        if (newVideoIcon && !newVideoIcon.querySelector('.jitsi-lord-icon')) {
+                            replaceCameraIcon(newVideoIcon);
+                        }
+                        if (newSettingsIcon && !newSettingsIcon.querySelector('.jitsi-lord-icon')) {
+                            replaceSettingsIcon(newSettingsIcon);
+                        }
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+    
+    // Função de debug
+    function debugInfo() {
+        console.log('🔍 DEBUG INFO:');
+        console.log('📍 Document ready state:', document.readyState);
+        console.log('📍 Lord Icon library loaded:', typeof window.lordicon !== 'undefined');
+        
+        const allToolboxIcons = document.querySelectorAll('.toolbox-icon');
+        console.log('📍 Total toolbox icons found:', allToolboxIcons.length);
+        
+        allToolboxIcons.forEach((icon, index) => {
+            console.log(`📍 Icon ${index + 1}:`, {
+                classes: icon.className,
+                parent: icon.parentElement?.className,
+                hasLordIcon: !!icon.querySelector('.jitsi-lord-icon'),
+                hasSvg: !!icon.querySelector('svg')
+            });
+        });
+        
+        // Procurar por data-testid
+        const testIds = ['prejoin.audioMute', 'prejoin.videoMute', 'prejoin.settings'];
+        testIds.forEach(testId => {
+            const element = document.querySelector(`[data-testid="${testId}"]`);
+            console.log(`📍 ${testId}:`, element ? 'found' : 'not found');
+        });
+    }
+
+    // Exposar função global para debug
+    window.jitsiLordIcons = {
+        reinit: initLordIcons,
+        replace: replacePreJoinIcons,
+        debug: debugInfo
+    };
+    
+    console.log('🎭 Jitsi Lord Icons: Script carregado com sucesso!');
+    console.log('💡 Para debug, execute: jitsiLordIcons.debug()');
+})();

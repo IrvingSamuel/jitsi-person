@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Correção - Ícones Posicionamento</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+        .info { color: #2196F3; }
+        .fixed { background: #1b5e20; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Teste de Correção - Posicionamento dos Ícones</h1>
+        
+        <div class="section">
+            <h2>🎯 Testes de Correção</h2>
+            <button onclick="testJitsiPage()">Abrir Jitsi</button>
+            <button onclick="showCommands()">Mostrar Comandos</button>
+            <button onclick="testCurrentPage()">Testar Página Atual</button>
+        </div>
+
+        <div class="section">
+            <h2>📋 Comandos para Console</h2>
+            <div id="commands" class="result info">
+Comandos disponíveis no Console do Jitsi:
+
+1. 🔍 Debug completo:
+   jitsiLordIcons.debug()
+
+2. 🔧 Corrigir ícones mal posicionados:
+   jitsiLordIcons.fix()
+
+3. 🔄 Reinicializar tudo:
+   jitsiLordIcons.reinit()
+
+4. 🎭 Substituir ícones manualmente:
+   jitsiLordIcons.replace()
+
+5. 🎯 Verificar ícones mal posicionados:
+   document.querySelectorAll('.toolbox-button > lord-icon.jitsi-lord-icon').length
+
+6. 📍 Ver todos os Lord Icons:
+   Array.from(document.querySelectorAll('lord-icon')).map(icon => ({
+     src: icon.getAttribute('src'),
+     parent: icon.parentElement.className,
+     position: icon.parentElement.tagName
+   }))
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Status da Correção</h2>
+            <div id="status" class="result">Clique em "Testar Página Atual" para verificar</div>
+        </div>
+
+        <div class="section">
+            <h2>🎭 Problema Identificado</h2>
+            <div class="result warning">
+<strong>PROBLEMA ANTERIOR:</strong>
+O Lord Icon estava sendo inserido como irmão do botão (.toolbox-button), 
+mas deveria estar DENTRO do .toolbox-icon.
+
+<strong>ESTRUTURA CORRETA:</strong>
+.toolbox-button
+  └── .toolbox-icon
+      ├── .jitsi-icon (SVG original - hidden)
+      └── lord-icon (NOSSO ÍCONE - aqui)
+
+<strong>ESTRUTURA INCORRETA (antes):</strong>
+.toolbox-button
+  ├── .toolbox-icon
+  │   └── .jitsi-icon (SVG original - hidden)
+  └── lord-icon (NOSSO ÍCONE - posição errada)
+
+<strong>CORREÇÃO APLICADA:</strong>
+- Agora procuramos pelo botão com aria-label="Selecionar Fundo"
+- Encontramos o .toolbox-icon DENTRO desse botão  
+- Inserimos o Lord Icon no lugar correto
+- Adicionada função fix() para corrigir ícones mal posicionados
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testJitsiPage() {
+            const jitsiUrl = window.location.origin;
+            const newWindow = window.open(jitsiUrl, '_blank');
+            
+            if (newWindow) {
+                alert(`Jitsi aberto em nova aba.\n\nDepois que carregar:\n1. Abra Console (F12)\n2. Execute: jitsiLordIcons.fix()\n3. Execute: jitsiLordIcons.debug()`);
+            } else {
+                alert('Popup bloqueado. Acesse manualmente: ' + jitsiUrl);
+            }
+        }
+
+        function showCommands() {
+            const commands = document.getElementById('commands');
+            commands.scrollIntoView({ behavior: 'smooth' });
+            commands.style.border = '2px solid #2196F3';
+            setTimeout(() => {
+                commands.style.border = 'none';
+            }, 2000);
+        }
+
+        function testCurrentPage() {
+            const status = document.getElementById('status');
+            let result = '';
+            
+            // Verificar se estamos no Jitsi
+            const isJitsi = window.location.pathname === '/' || window.location.href.includes('jitsi');
+            result += `🌐 Página: ${isJitsi ? 'Jitsi Meet' : 'Página de teste'}\n`;
+            
+            if (isJitsi) {
+                // Verificar nossa biblioteca
+                const ourLibLoaded = typeof window.jitsiLordIcons !== 'undefined';
+                result += `📚 Biblioteca carregada: ${ourLibLoaded ? '✅ Sim' : '❌ Não'}\n`;
+                
+                if (ourLibLoaded) {
+                    result += `🔧 Função fix disponível: ${typeof window.jitsiLordIcons.fix === 'function' ? '✅' : '❌'}\n`;
+                }
+                
+                // Verificar Lord Icons
+                const allLordIcons = document.querySelectorAll('lord-icon');
+                result += `🎭 Total Lord Icons: ${allLordIcons.length}\n`;
+                
+                // Verificar ícones mal posicionados
+                const misplacedIcons = document.querySelectorAll('.toolbox-button > lord-icon.jitsi-lord-icon');
+                result += `❌ Ícones mal posicionados: ${misplacedIcons.length}\n`;
+                
+                // Verificar ícones bem posicionados
+                const wellPlacedIcons = document.querySelectorAll('.toolbox-icon > lord-icon.jitsi-lord-icon');
+                result += `✅ Ícones bem posicionados: ${wellPlacedIcons.length}\n`;
+                
+                // Verificar botão de fundo específico
+                const backgroundButton = document.querySelector('[aria-label="Selecionar Fundo"]');
+                if (backgroundButton) {
+                    const toolboxIcon = backgroundButton.querySelector('.toolbox-icon');
+                    const lordIcon = toolboxIcon?.querySelector('lord-icon');
+                    result += `🖼️ Botão "Selecionar Fundo": ${backgroundButton ? 'Encontrado' : 'Não encontrado'}\n`;
+                    result += `🖼️ Toolbox icon dentro: ${toolboxIcon ? 'Sim' : 'Não'}\n`;
+                    result += `🖼️ Lord Icon dentro: ${lordIcon ? 'Sim' : 'Não'}\n`;
+                    
+                    if (lordIcon) {
+                        result += `🖼️ Src do ícone: ${lordIcon.getAttribute('src')}\n`;
+                    }
+                } else {
+                    result += `🖼️ Botão "Selecionar Fundo": Não encontrado\n`;
+                }
+                
+                if (misplacedIcons.length > 0) {
+                    result += `\n🔧 EXECUTE NO CONSOLE: jitsiLordIcons.fix()\n`;
+                }
+                
+            } else {
+                result += '\n⚠️ Para testar, acesse o Jitsi Meet primeiro.\n';
+            }
+            
+            status.textContent = result;
+            status.className = 'result ' + (isJitsi ? 
+                (misplacedIcons?.length > 0 ? 'warning' : 'success') : 
+                'info'
+            );
+        }
+
+        // Auto-test ao carregar se estivermos no Jitsi
+        setTimeout(() => {
+            if (window.location.pathname === '/' || window.location.href.includes('jitsi')) {
+                testCurrentPage();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

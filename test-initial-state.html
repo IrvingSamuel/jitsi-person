@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Estado Inicial - Ícones Áudio/Vídeo</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #2a2a2a;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+        .info { color: #2196F3; }
+        .code {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Teste Estado Inicial - Ícones Áudio/Vídeo</h1>
+        
+        <div class="section">
+            <h2>🔧 Correção Aplicada</h2>
+            <div class="result info">
+<strong>PROBLEMA CORRIGIDO:</strong>
+Os ícones de áudio e vídeo não detectavam corretamente o estado inicial quando
+estavam desligados (classe 'toggled' ativa desde o início).
+
+<strong>CORREÇÃO:</strong>
+✅ Verificação do estado inicial com element.classList.contains('toggled')
+✅ Definição das cores corretas baseadas no estado inicial
+✅ Logs de debug para acompanhar as mudanças de estado
+
+<strong>ESTADOS:</strong>
+🎤 Microfone:
+  - Ligado (sem toggled): Branco (#ffffff)
+  - Mutado (com toggled): Vermelho (#e04757)
+
+📹 Câmera:
+  - Ligada (sem toggled): gksubfms.json + Branco
+  - Desligada (com toggled): kqbuxhwp.json + Vermelho
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Testes</h2>
+            <button onclick="testJitsiPage()">Abrir Jitsi</button>
+            <button onclick="showCommands()">Comandos Console</button>
+            <button onclick="testCurrentPage()">Testar Página Atual</button>
+        </div>
+
+        <div class="section">
+            <h2>📋 Comandos para Console</h2>
+            <div id="commands" class="result code">
+// 1. Debug completo com estados
+jitsiLordIcons.debug()
+
+// 2. Reinicializar para testar estado inicial
+jitsiLordIcons.reinit()
+
+// 3. Verificar estados dos ícones
+document.querySelectorAll('.toolbox-icon').forEach((icon, i) => {
+  const lordIcon = icon.querySelector('lord-icon');
+  const isToggled = icon.classList.contains('toggled');
+  console.log(`Ícone ${i+1}:`, {
+    toggled: isToggled,
+    colors: lordIcon?.getAttribute('colors'),
+    src: lordIcon?.getAttribute('src')?.split('/').pop()
+  });
+});
+
+// 4. Simular mudança de estado (teste)
+const audioIcon = document.querySelector('.audio-preview .toolbox-icon');
+if (audioIcon) {
+  audioIcon.classList.toggle('toggled');
+  console.log('Estado do áudio alterado para:', audioIcon.classList.contains('toggled'));
+}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Status dos Ícones</h2>
+            <div id="status" class="result">Clique em "Testar Página Atual" para verificar</div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Estados Esperados</h2>
+            <div class="result">
+<strong>CENÁRIOS DE TESTE:</strong>
+
+1️⃣ <strong>Usuário entra com microfone e câmera desligados:</strong>
+   - Elementos têm classe 'toggled' desde o início
+   - Ícones devem aparecer VERMELHOS imediatamente
+   - Microfone: vycwlttg.json + cores vermelhas
+   - Câmera: kqbuxhwp.json + cores vermelhas
+
+2️⃣ <strong>Usuário entra com microfone e câmera ligados:</strong>
+   - Elementos NÃO têm classe 'toggled'
+   - Ícones devem aparecer BRANCOS
+   - Microfone: vycwlttg.json + cores brancas
+   - Câmera: gksubfms.json + cores brancas
+
+3️⃣ <strong>Usuário clica para alternar estado:</strong>
+   - MutationObserver detecta mudança na classe
+   - Cores e ícones se alteram dinamicamente
+   - Logs aparecem no console mostrando as mudanças
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testJitsiPage() {
+            const jitsiUrl = window.location.origin;
+            const newWindow = window.open(jitsiUrl, '_blank');
+            
+            if (newWindow) {
+                alert(`Jitsi aberto!\n\nPara testar:\n1. Entre na sala (com mic/cam desligados se possível)\n2. Abra Console (F12)\n3. Observe os logs de estado inicial\n4. Execute os comandos de teste`);
+            } else {
+                alert('Popup bloqueado. Acesse: ' + jitsiUrl);
+            }
+        }
+
+        function showCommands() {
+            const commands = document.getElementById('commands');
+            commands.scrollIntoView({ behavior: 'smooth' });
+            commands.style.border = '2px solid #007bff';
+            setTimeout(() => {
+                commands.style.border = '1px solid #444';
+            }, 2000);
+        }
+
+        function testCurrentPage() {
+            const status = document.getElementById('status');
+            let result = '';
+            
+            const isJitsi = window.location.pathname === '/' || window.location.href.includes('jitsi');
+            result += `🌐 Página: ${isJitsi ? 'Jitsi Meet' : 'Página de teste'}\n`;
+            
+            if (isJitsi) {
+                const ourLibLoaded = typeof window.jitsiLordIcons !== 'undefined';
+                result += `📚 Biblioteca: ${ourLibLoaded ? '✅ Carregada' : '❌ Não carregada'}\n\n`;
+                
+                if (ourLibLoaded) {
+                    // Verificar ícones de áudio
+                    const audioIcon = document.querySelector('.audio-preview .toolbox-icon');
+                    if (audioIcon) {
+                        const lordIcon = audioIcon.querySelector('lord-icon');
+                        const isToggled = audioIcon.classList.contains('toggled');
+                        result += `🎤 ÁUDIO:\n`;
+                        result += `   Estado toggled: ${isToggled}\n`;
+                        result += `   Lord Icon: ${lordIcon ? 'Presente' : 'Ausente'}\n`;
+                        if (lordIcon) {
+                            result += `   Cores: ${lordIcon.getAttribute('colors')}\n`;
+                            result += `   Src: ${lordIcon.getAttribute('src')?.split('/').pop()}\n`;
+                            const expectedRed = isToggled;
+                            const actualRed = lordIcon.getAttribute('colors')?.includes('#e04757');
+                            result += `   Cor correta: ${expectedRed === actualRed ? '✅' : '❌'}\n`;
+                        }
+                        result += `\n`;
+                    } else {
+                        result += `🎤 ÁUDIO: Ícone não encontrado\n\n`;
+                    }
+                    
+                    // Verificar ícones de vídeo
+                    const videoIcon = document.querySelector('.video-preview .toolbox-icon');
+                    if (videoIcon) {
+                        const lordIcon = videoIcon.querySelector('lord-icon');
+                        const isToggled = videoIcon.classList.contains('toggled');
+                        result += `📹 VÍDEO:\n`;
+                        result += `   Estado toggled: ${isToggled}\n`;
+                        result += `   Lord Icon: ${lordIcon ? 'Presente' : 'Ausente'}\n`;
+                        if (lordIcon) {
+                            result += `   Cores: ${lordIcon.getAttribute('colors')}\n`;
+                            result += `   Src: ${lordIcon.getAttribute('src')?.split('/').pop()}\n`;
+                            const expectedRed = isToggled;
+                            const actualRed = lordIcon.getAttribute('colors')?.includes('#e04757');
+                            const expectedSrc = isToggled ? 'kqbuxhwp.json' : 'gksubfms.json';
+                            const actualSrc = lordIcon.getAttribute('src')?.split('/').pop();
+                            result += `   Cor correta: ${expectedRed === actualRed ? '✅' : '❌'}\n`;
+                            result += `   Ícone correto: ${expectedSrc === actualSrc ? '✅' : '❌'}\n`;
+                        }
+                        result += `\n`;
+                    } else {
+                        result += `📹 VÍDEO: Ícone não encontrado\n\n`;
+                    }
+                    
+                    const allLordIcons = document.querySelectorAll('lord-icon.jitsi-lord-icon');
+                    result += `🎭 Total Lord Icons: ${allLordIcons.length}\n`;
+                } else {
+                    result += `❌ Biblioteca não carregada. Recarregue a página.\n`;
+                }
+            } else {
+                result += `\n⚠️ Para testar, acesse o Jitsi Meet.\n`;
+            }
+            
+            status.textContent = result;
+            status.className = 'result ' + (isJitsi ? 'success' : 'info');
+        }
+
+        // Auto-test se estivermos no Jitsi
+        setTimeout(() => {
+            if (window.location.pathname === '/' || window.location.href.includes('jitsi')) {
+                testCurrentPage();
+                // Re-testar após um tempo para capturar mudanças
+                setTimeout(testCurrentPage, 5000);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
